@@ -9,5 +9,6 @@ sed -n "3p;" perf/$1/dgemm_$1_$2.dat >> perf/$1/dgemm_$1_$2_ikj.dat
 sed -n "4p;" perf/$1/dgemm_$1_$2.dat >> perf/$1/dgemm_$1_$2_iex.dat
 sed -n "5p;" perf/$1/dgemm_$1_$2.dat >> perf/$1/dgemm_$1_$2_unroll.dat
 sed -n "6p;" perf/$1/dgemm_$1_$2.dat >> perf/$1/dgemm_$1_$2_cblas.dat
+sed -n "7p;" perf/$1/dgemm_$1_$2.dat >> perf/$1/dgemm_$1_$2_unroll8.dat
 
 rm dgemm

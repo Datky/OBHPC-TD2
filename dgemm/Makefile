@@ -2,7 +2,7 @@ CC=clang
 
 CFLAGS=-g -Wall
 
-OFLAGS=-O3
+OFLAGS=-Ofast
 
 INTEL_LFLAGS=-qmkl
 GNU_LFLAGS=-lm -lcblas
