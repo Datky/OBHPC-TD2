@@ -2,7 +2,7 @@ CC=gcc
 
 CFLAGS=-g -Wall
 
-OFLAGS=-O3
+OFLAGS=-O2
 
 INTEL_LFLAGS=-qmkl
 GNU_LFLAGS=-lm -lcblas
