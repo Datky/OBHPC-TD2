@@ -46,13 +46,13 @@ int main(int argc, char **argv)
 	 "title",
 	 "KiB", "MiB", "GiB",
 	 "n", "r", "min", "max", "mean", "stddev (%)", "MiB/s");
-  
+
   run_benchmark("IJK",   dgemm_ijk, n, r);
   run_benchmark("IKJ",   dgemm_ikj, n, r);
   run_benchmark("IEX",   dgemm_iex, n, r);
   run_benchmark("UNROLL", dgemm_unroll, n, r);
   run_benchmark("CBLAS", dgemm_cblas, n, r);
-  
+
   //
   return 0;
 }
@@ -65,23 +65,23 @@ void run_benchmark(const ascii *title,
 {
   //Calculate the size of a single matrix
   u64 size = (sizeof(f64) * n * n);
-  
+
   //
   f64 size_b = (float)size;
   f64 size_kib = size_b / (1024.0);
   f64 size_mib = size_b / (1024.0 * 1024.0);
   f64 size_gib = size_b / (1024.0 * 1024.0 * 1024.0);
-  
+
   //
   f64 elapsed = 0.0;
   struct timespec t1, t2;
   f64 samples[MAX_SAMPLES];
-  
+
   //
   f64 *restrict a = aligned_alloc(ALIGN64, size);
   f64 *restrict b = aligned_alloc(ALIGN64, size);
   f64 *restrict c = aligned_alloc(ALIGN64, size);
-  
+
   //
   init_f64(a, n, 'r');
   init_f64(b, n, 'r');
@@ -93,19 +93,19 @@ void run_benchmark(const ascii *title,
       do
 	{
 	  clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
-	  
+
 	  for (u64 j = 0; j < r; j++)
 	    kernel(a, b, c, n);
-	  
+
 	  clock_gettime(CLOCK_MONOTONIC_RAW, &t2);
-	  
-	  elapsed = (f64)(t2.tv_nsec - t1.tv_nsec) / (f64)r;	  
+
+	  elapsed = (f64)(t2.tv_nsec - t1.tv_nsec) / (f64)r;
 	}
       while (elapsed <= 0.0);
 
       samples[i] = elapsed;
     }
-  
+
   //
   sort_f64(samples, MAX_SAMPLES);
 
@@ -132,7 +132,7 @@ void run_benchmark(const ascii *title,
 	 dev,
 	 (dev * 100.0 / mean),
 	 mbps);
-  
+
   //
   free(a);
   free(b);
