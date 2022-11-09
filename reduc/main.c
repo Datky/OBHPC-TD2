@@ -46,9 +46,10 @@ int main(int argc, char **argv)
 	 "title",
 	 "KiB", "MiB", "GiB",
 	 "n", "r", "d", "min", "max", "mean", "stddev (%)", "MiB/s");
-  
+
   run_benchmark("BASE",   reduc_base, n, r);
-  
+	run_benchmark("UNROLLx8",   reduc_unroll8, n, r);
+
   //
   return 0;
 }
@@ -61,22 +62,22 @@ void run_benchmark(const ascii *title,
 {
   //Calculate the size of a single matrix
   u64 size = (sizeof(f64) * n);
-  
+
   //
   f64 size_b = (float) size;
   f64 size_kib = size_b / (1024.0);
   f64 size_mib = size_b / (1024.0 * 1024.0);
   f64 size_gib = size_b / (1024.0 * 1024.0 * 1024.0);
-  
+
   //
   f64 elapsed = 0.0;
   struct timespec t1, t2;
   f64 samples[MAX_SAMPLES];
-  
+
   //
   f64 d = 0.0;
   f64 *restrict a = aligned_alloc(ALIGN64, size);
-  
+
   //
   init_f64(a, n, 'r');
 
@@ -86,28 +87,28 @@ void run_benchmark(const ascii *title,
       do
 	{
 	  clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
-	  
+
 	  for (u64 j = 0; j < r; j++)
 	    d = kernel(a, n);
-	  
+
 	  clock_gettime(CLOCK_MONOTONIC_RAW, &t2);
-	  
-	  elapsed = (f64)(t2.tv_nsec - t1.tv_nsec) / (f64)r;	  
+
+	  elapsed = (f64)(t2.tv_nsec - t1.tv_nsec) / (f64)r;
 	}
       while (elapsed <= 0.0);
-      
+
       samples[i] = elapsed;
     }
-  
+
   //
   sort_f64(samples, MAX_SAMPLES);
-  
+
   //
   f64 min  = samples[0];
   f64 max  = samples[MAX_SAMPLES - 1];
   f64 mean = mean_f64(samples, MAX_SAMPLES);
   f64 dev  = stddev_f64(samples, MAX_SAMPLES);
-  
+
   //Size in MiB / time in seconds
   f64 mbps = size_mib / (mean / 1e9);
 
@@ -126,7 +127,7 @@ void run_benchmark(const ascii *title,
 	 dev,
 	 (dev * 100.0 / mean),
 	 mbps);
-  
+
   //
   free(a);
 }
