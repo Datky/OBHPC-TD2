@@ -1,3 +1,5 @@
+CC=gcc
+
 CFLAGS=-g -Wall
 
 OFLAGS=-O3
