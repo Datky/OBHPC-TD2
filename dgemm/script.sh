@@ -1,5 +1,7 @@
 #!/bin/bash
 
+make
+
 taskset -c 2 ./dgemm 100 100 >> perf/dgemm_gcc_$1.dat
 
 sed -n "2p;" perf/dgemm_gcc_$1.dat >> perf/gcc/dgemm_gcc_$1_ijk.dat
