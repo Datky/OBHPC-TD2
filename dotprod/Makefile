@@ -1,8 +1,8 @@
-CC = gcc
+CC = clang
 
 CFLAGS=-g -Wall
 
-OFLAGS=-O2
+OFLAGS=-O1
 
 INTEL_LFLAGS=-qmkl
 GNU_LFLAGS=-lm -lcblas
